@@ -1,64 +1,46 @@
 import { ChevronLeft, ChevronRight } from "./Icons";
+import { cn } from "@/utils/cn";
 
 export default function CalendarHeader({
   monthOptions,
   monthIndex,
-  yearOptions,
   year,
   onMonthChange,
-  onYearChange,
   onPrevious,
   onNext,
   onToday,
+  theme,
 }) {
   return (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <label htmlFor="month-selector" className="sr-only">
-              Select month
-            </label>
-            <select
-              id="month-selector"
-              value={monthIndex}
-              onChange={(event) => onMonthChange(Number(event.target.value))}
-              className="cursor-pointer appearance-none rounded-lg border border-zinc-200 bg-white px-3 py-2 pr-7 text-lg font-semibold tracking-tight text-zinc-900 transition hover:border-zinc-300 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-300"
-            >
-              {monthOptions.map((monthName, index) => (
-                <option key={monthName} value={index}>
-                  {monthName}
-                </option>
-              ))}
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-600">
-              ▼
-            </span>
-          </div>
-
-          <div className="relative">
-            <label htmlFor="year-selector" className="sr-only">
-              Select year
-            </label>
-            <select
-              id="year-selector"
-              value={year}
-              onChange={(event) => onYearChange(Number(event.target.value))}
-              className="cursor-pointer appearance-none rounded-lg border border-zinc-200 bg-white px-3 py-2 pr-7 text-lg font-semibold tracking-tight text-zinc-900 transition hover:border-zinc-300 hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-300"
-            >
-              {yearOptions.map((yearOption) => (
-                <option key={yearOption} value={yearOption}>
-                  {yearOption}
-                </option>
-              ))}
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-600">
-              ▼
-            </span>
-          </div>
+    <header
+      className={cn(
+        "flex flex-col gap-4 rounded-xl p-2 transition-colors duration-300 sm:flex-row sm:items-center sm:justify-between",
+        theme?.headerGradient
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <div className="relative">
+          <label htmlFor="month-selector" className="sr-only">
+            Select month
+          </label>
+          <select
+            id="month-selector"
+            value={monthIndex}
+            onChange={(event) => onMonthChange(Number(event.target.value))}
+            className="cursor-pointer appearance-none rounded-lg border-b-2 border-b-transparent bg-gray-100 px-3 py-1 pr-7 text-lg font-semibold tracking-tight text-zinc-900 transition-all duration-200 hover:border-b-zinc-300 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-zinc-300"
+          >
+            {monthOptions.map((monthName, index) => (
+              <option key={monthName} value={index}>
+                {monthName}
+              </option>
+            ))}
+          </select>
+          <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-600">
+            ▼
+          </span>
         </div>
 
-        <p className="text-sm text-zinc-600">A clean date-fns powered calendar.</p>
+        <span className="text-lg font-semibold tracking-tight text-zinc-900">{year}</span>
       </div>
 
       <div className="flex items-center gap-2">

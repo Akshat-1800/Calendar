@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { format } from "date-fns";
 import { cn } from "@/utils/cn";
+import { THEMES } from "@/utils/seasonTheme";
 
 export default function NoteModal({
   open,
@@ -14,6 +15,7 @@ export default function NoteModal({
   onDescriptionChange,
   onSave,
   onCancel,
+  theme = THEMES.winter,
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -48,7 +50,7 @@ export default function NoteModal({
   return createPortal(
     <div
       className={cn(
-        "fixed inset-0 z-80 flex items-center justify-center p-4 transition-all duration-200",
+        "fixed inset-0 z-80 flex items-center justify-center p-4 transition-all duration-200 ease-out",
         open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       )}
     >
@@ -56,7 +58,7 @@ export default function NoteModal({
         type="button"
         aria-label="Close add note modal"
         onClick={onCancel}
-        className="absolute inset-0 bg-zinc-900/50"
+        className="absolute inset-0 bg-zinc-900/50 transition-opacity duration-200 ease-out"
       />
 
       <section
@@ -64,7 +66,7 @@ export default function NoteModal({
         aria-modal="true"
         aria-label="Add note"
         className={cn(
-          "relative w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200",
+          "relative w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200 ease-out",
           open ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
         )}
       >
@@ -80,7 +82,12 @@ export default function NoteModal({
             value={noteTitle}
             onChange={(event) => onTitleChange(event.target.value)}
             placeholder="Enter note title"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className={cn(
+              "w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-all",
+              theme.focusBorder,
+              "focus:ring-2",
+              theme.focusRing
+            )}
           />
 
           <label className="block text-sm font-medium text-zinc-700" htmlFor="note-description-input">
@@ -92,7 +99,12 @@ export default function NoteModal({
             onChange={(event) => onDescriptionChange(event.target.value)}
             placeholder="Add note details"
             rows={4}
-            className="w-full resize-none rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className={cn(
+              "w-full resize-none rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none transition-all",
+              theme.focusBorder,
+              "focus:ring-2",
+              theme.focusRing
+            )}
           />
 
           <p className="rounded-lg bg-zinc-100 px-3 py-2 text-sm text-zinc-700">
@@ -115,7 +127,7 @@ export default function NoteModal({
             disabled={!canSave}
             className={cn(
               "rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all duration-200",
-              canSave ? "bg-blue-600 hover:bg-blue-700" : "cursor-not-allowed bg-blue-300"
+              canSave ? cn(theme.primary, theme.primaryHover) : "cursor-not-allowed bg-zinc-300"
             )}
           >
             Save

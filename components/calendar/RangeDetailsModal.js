@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { format } from "date-fns";
 import { cn } from "@/utils/cn";
+import { THEMES } from "@/utils/seasonTheme";
 
 function formatDateLabel(date) {
   if (!date) {
@@ -20,6 +21,7 @@ export default function RangeDetailsModal({
   onAddNote,
   onDeleteRequest,
   onClose,
+  theme = THEMES.winter,
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -53,7 +55,7 @@ export default function RangeDetailsModal({
     ? createPortal(
         <div
           className={cn(
-            "fixed inset-0 z-80 flex items-center justify-center p-4 transition-all duration-200",
+            "fixed inset-0 z-80 flex items-center justify-center p-4 transition-all duration-200 ease-out",
             open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           )}
         >
@@ -61,7 +63,7 @@ export default function RangeDetailsModal({
             type="button"
             aria-label="Close range details modal"
             onClick={onClose}
-            className="absolute inset-0 bg-zinc-900/50"
+            className="absolute inset-0 bg-zinc-900/50 transition-opacity duration-200 ease-out"
           />
 
           <section
@@ -69,7 +71,7 @@ export default function RangeDetailsModal({
             aria-modal="true"
             aria-label="Range details"
             className={cn(
-              "relative w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200",
+              "relative w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200 ease-out",
               open ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
             )}
           >
@@ -95,14 +97,24 @@ export default function RangeDetailsModal({
               <button
                 type="button"
                 onClick={onModify}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className={cn(
+                  "rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all duration-300",
+                  theme.primary,
+                  theme.primaryHover
+                )}
               >
                 Modify Dates
               </button>
               <button
                 type="button"
                 onClick={onAddNote}
-                className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
+                className={cn(
+                  "rounded-lg border px-4 py-2 text-sm font-semibold transition-all duration-300",
+                  theme.borderSoft,
+                  theme.preview,
+                  theme.textStrong,
+                  theme.previewHover
+                )}
               >
                 Add Note
               </button>

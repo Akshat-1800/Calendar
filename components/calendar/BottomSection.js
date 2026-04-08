@@ -13,7 +13,7 @@ function createNoteId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-export default function BottomSection() {
+export default function BottomSection({ onVisibleMonthIndexChange }) {
   const [notes, setNotes] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -52,6 +52,7 @@ export default function BottomSection() {
         notes={notes}
         onAddNote={handleAddNote}
         onSelectedDateChange={handleSelectedDateChange}
+        onVisibleMonthIndexChange={onVisibleMonthIndexChange}
       />
     </div>
   );

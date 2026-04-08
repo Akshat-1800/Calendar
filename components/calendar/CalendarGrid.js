@@ -9,6 +9,7 @@ export default function CalendarGrid({
   onDayHover,
   getRangeStateForDate,
   hasNoteForDate,
+  theme,
 }) {
   return (
     <div>
@@ -30,6 +31,7 @@ export default function CalendarGrid({
             onHover={onDayHover}
             rangeState={getRangeStateForDate?.(day.date)}
             hasNote={hasNoteForDate?.(day.date)}
+            theme={theme}
           />
         ))}
       </div>

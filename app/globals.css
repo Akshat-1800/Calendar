@@ -2,7 +2,7 @@
 @import "animate.css";
 
 :root {
-  --background: #f3f4f6;
+  --background: #f5f5f3;
   --foreground: #111827;
 }
 
@@ -13,18 +13,67 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
+body {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(115, 108, 94, 0.045) 0.7px, transparent 0.8px),
+    radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 55%);
+  background-size: 6px 6px, 100% 100%;
+  background-position: 0 0, 0 0;
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+@keyframes calendar-grid-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background:
-    radial-gradient(circle at top right, #dbeafe 0%, transparent 40%),
-    radial-gradient(circle at bottom left, #d1fae5 0%, transparent 35%),
-    var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, sans-serif;
+.calendar-grid-enter {
+  animation: calendar-grid-enter 300ms ease-in-out;
+}
+
+@keyframes range-pop {
+  from {
+    transform: scale(1.05);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.range-pop {
+  animation: range-pop 220ms ease-out;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-slide-in {
+  animation: toast-slide-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendar-grid-enter,
+  .range-pop,
+  .toast-slide-in {
+    animation: none !important;
+  }
 }

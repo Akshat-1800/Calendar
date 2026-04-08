@@ -36,7 +36,7 @@ export default function NoteDeleteConfirmModal({ open, onCancel, onConfirm }) {
   return createPortal(
     <div
       className={cn(
-        "fixed inset-0 z-90 flex items-center justify-center p-4 transition-all duration-200",
+        "fixed inset-0 z-90 flex items-center justify-center p-4 transition-all duration-200 ease-out",
         open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       )}
     >
@@ -44,7 +44,7 @@ export default function NoteDeleteConfirmModal({ open, onCancel, onConfirm }) {
         type="button"
         aria-label="Close delete note confirmation"
         onClick={onCancel}
-        className="absolute inset-0 bg-zinc-900/45 backdrop-blur-sm"
+        className="absolute inset-0 bg-zinc-900/45 backdrop-blur-sm transition-opacity duration-200 ease-out"
       />
 
       <section
@@ -52,7 +52,7 @@ export default function NoteDeleteConfirmModal({ open, onCancel, onConfirm }) {
         aria-modal="true"
         aria-label="Delete note confirmation"
         className={cn(
-          "relative w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200",
+          "relative w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl transition-all duration-200 ease-out",
           open ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
         )}
       >

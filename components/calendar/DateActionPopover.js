@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { format } from "date-fns";
 import { cn } from "@/utils/cn";
+import { THEMES } from "@/utils/seasonTheme";
 
 const POPOVER_WIDTH = 256;
 const POPOVER_HEIGHT = 164;
@@ -39,6 +40,7 @@ export default function DateActionPopover({
   onClose,
   onStartRange,
   onAddNote,
+  theme = THEMES.winter,
 }) {
   const desktopPanelRef = useRef(null);
   const mobilePanelRef = useRef(null);
@@ -120,14 +122,24 @@ export default function DateActionPopover({
           <button
             type="button"
             onClick={onAddNote}
-            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-50"
+            className={cn(
+              "w-full rounded-lg border px-3 py-2 text-sm font-semibold transition-all duration-300",
+              theme.borderSoft,
+              theme.preview,
+              theme.textStrong,
+              theme.previewHover
+            )}
           >
             Add Note
           </button>
           <button
             type="button"
             onClick={onStartRange}
-            className="w-full rounded-lg bg-zinc-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className={cn(
+              "w-full rounded-lg px-3 py-2 text-sm font-semibold text-white transition-all duration-300",
+              theme.primary,
+              theme.primaryHover
+            )}
           >
             Start Range
           </button>
@@ -156,14 +168,24 @@ export default function DateActionPopover({
           <button
             type="button"
             onClick={onAddNote}
-            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-50"
+            className={cn(
+              "w-full rounded-lg border px-3 py-2 text-sm font-semibold transition-all duration-300",
+              theme.borderSoft,
+              theme.preview,
+              theme.textStrong,
+              theme.previewHover
+            )}
           >
             Add Note
           </button>
           <button
             type="button"
             onClick={onStartRange}
-            className="w-full rounded-lg bg-zinc-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className={cn(
+              "w-full rounded-lg px-3 py-2 text-sm font-semibold text-white transition-all duration-300",
+              theme.primary,
+              theme.primaryHover
+            )}
           >
             Start Range
           </button>

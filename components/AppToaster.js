@@ -33,20 +33,22 @@ export default function AppToaster() {
       gutter={10}
       containerStyle={{ top: 16, left: 16, right: 16 }}
       toastOptions={{
-        duration: 2600,
+        className: "toast-slide-in",
+        duration: 2400,
         style: {
           borderRadius: "12px",
-          background: "#111827",
-          color: "#f8fafc",
+          border: "1px solid #e4e4e7",
+          background: "#ffffff",
+          color: "#111827",
           fontSize: "14px",
-          fontWeight: 500,
+          fontWeight: 600,
           padding: "10px 14px",
-          boxShadow: "0 8px 20px rgba(15, 23, 42, 0.2)",
+          boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)",
         },
         success: {
           iconTheme: {
-            primary: "#3b82f6",
-            secondary: "#eff6ff",
+            primary: "#2563eb",
+            secondary: "#ffffff",
           },
         },
       }}

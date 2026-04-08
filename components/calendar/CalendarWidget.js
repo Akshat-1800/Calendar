@@ -17,14 +17,12 @@ import RangeCreateModal from "./RangeCreateModal";
 import RangeDetailsModal from "./RangeDetailsModal";
 import RangeDeleteConfirmModal from "./RangeDeleteConfirmModal";
 import NoteModal from "./NoteModal";
+import { cn } from "@/utils/cn";
+import { getSeason, THEMES } from "@/utils/seasonTheme";
 import {
   getCalendarDays,
-  getYearNumber,
-  getNextMonth,
-  getPreviousMonth,
   MONTH_OPTIONS,
   setMonthInDate,
-  setYearInDate,
 } from "@/utils/date";
 
 function getEmptyTempRange() {
@@ -58,7 +56,12 @@ function createRangeId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateChange }) {
+export default function CalendarWidget({
+  notes = [],
+  onAddNote,
+  onSelectedDateChange,
+  onVisibleMonthIndexChange,
+}) {
   const today = normalizeDay(new Date());
   const [mode, setMode] = useState("idle");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -79,17 +82,17 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
   const [showRangeDetailsModal, setShowRangeDetailsModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [hoveredDate, setHoveredDate] = useState(null);
+  const [recentlyCompletedRange, setRecentlyCompletedRange] = useState(null);
 
   const calendarRef = useRef(null);
 
-  const year = getYearNumber(visibleMonth);
   const monthIndex = visibleMonth.getMonth();
-  const yearOptions = useMemo(
-    () => Array.from({ length: 11 }, (_, index) => year - 5 + index),
-    [year]
-  );
+  const year = visibleMonth.getFullYear();
+  const season = getSeason(monthIndex);
+  const theme = THEMES[season];
 
   const days = useMemo(() => getCalendarDays(visibleMonth), [visibleMonth]);
+  const monthAnimationKey = useMemo(() => format(visibleMonth, "yyyy-MM"), [visibleMonth]);
   const selectedDateText = useMemo(
     () => (selectedDate ? format(selectedDate, "EEEE, MMMM do, yyyy") : "No date selected"),
     [selectedDate]
@@ -122,6 +125,28 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
 
     onSelectedDateChange(selectedDate ? new Date(selectedDate) : null);
   }, [selectedDate, onSelectedDateChange]);
+
+  useEffect(() => {
+    if (!onVisibleMonthIndexChange) {
+      return;
+    }
+
+    onVisibleMonthIndexChange(monthIndex);
+  }, [monthIndex, onVisibleMonthIndexChange]);
+
+  useEffect(() => {
+    if (!recentlyCompletedRange) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setRecentlyCompletedRange(null);
+    }, 260);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [recentlyCompletedRange]);
 
   function closePopover() {
     setShowPopover(false);
@@ -179,6 +204,16 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
   function getRangeStateForDate(date) {
     const currentDay = normalizeDay(date);
     const matchedRange = findTopRangeByDate(currentDay);
+    const isRangeSelectionStart = Boolean(
+      isAwaitingEndSelection && tempRange.start && isSameDay(currentDay, tempRange.start)
+    );
+    const isRecentlyCompleted = Boolean(
+      recentlyCompletedRange &&
+        isWithinInterval(currentDay, {
+          start: recentlyCompletedRange.start,
+          end: recentlyCompletedRange.end,
+        })
+    );
 
     if (matchedRange) {
       const isRangeStart = isSameDay(currentDay, matchedRange.start);
@@ -189,6 +224,8 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         isRangeEnd,
         isRangeMiddle: !isRangeStart && !isRangeEnd,
         isPreview: false,
+        isRangeSelectionStart,
+        isRecentlyCompleted,
       };
     }
 
@@ -202,6 +239,8 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
           isRangeEnd: false,
           isRangeMiddle: false,
           isPreview: true,
+          isRangeSelectionStart,
+          isRecentlyCompleted,
         };
       }
     }
@@ -211,6 +250,8 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
       isRangeEnd: false,
       isRangeMiddle: false,
       isPreview: false,
+      isRangeSelectionStart,
+      isRecentlyCompleted,
     };
   }
 
@@ -251,6 +292,11 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         end: new Date(orderedRange.end),
       },
     ]);
+
+    setRecentlyCompletedRange({
+      start: new Date(orderedRange.start),
+      end: new Date(orderedRange.end),
+    });
 
     toast.success("Range created successfully");
 
@@ -361,6 +407,11 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         )
       );
 
+      setRecentlyCompletedRange({
+        start: new Date(nextRange.start),
+        end: new Date(nextRange.end),
+      });
+
       resetSelectionFlow();
       return;
     }
@@ -413,12 +464,18 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
 
   function showPreviousMonth() {
     closePopover();
-    setVisibleMonth((current) => getPreviousMonth(current));
+    setVisibleMonth((current) => {
+      const nextMonthIndex = (current.getMonth() + 11) % 12;
+      return setMonthInDate(current, nextMonthIndex);
+    });
   }
 
   function showNextMonth() {
     closePopover();
-    setVisibleMonth((current) => getNextMonth(current));
+    setVisibleMonth((current) => {
+      const nextMonthIndex = (current.getMonth() + 1) % 12;
+      return setMonthInDate(current, nextMonthIndex);
+    });
   }
 
   function jumpToToday() {
@@ -433,40 +490,44 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
     setVisibleMonth((current) => setMonthInDate(current, nextMonthIndex));
   }
 
-  function handleYearChange(nextYear) {
-    closePopover();
-    setVisibleMonth((current) => setYearInDate(current, nextYear));
-  }
-
   return (
-    <div ref={calendarRef}>
+    <div ref={calendarRef} className="transition-colors duration-300">
       <CalendarHeader
         monthOptions={MONTH_OPTIONS}
         monthIndex={monthIndex}
-        yearOptions={yearOptions}
         year={year}
         onMonthChange={handleMonthChange}
-        onYearChange={handleYearChange}
         onPrevious={showPreviousMonth}
         onNext={showNextMonth}
         onToday={jumpToToday}
+        theme={theme}
       />
 
       {isAwaitingEndSelection && (
-        <p className="mt-4 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition-all">
+        <p
+          className={cn(
+            "mt-4 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-300",
+            theme.borderSoft,
+            theme.preview,
+            theme.textStrong
+          )}
+        >
           Selecting range... click end date
         </p>
       )}
 
       <div className="mt-5">
-        <CalendarGrid
-          days={days}
-          selectedDate={selectedDate}
-          onSelect={handleDateSelect}
-          onDayHover={handleDayHover}
-          getRangeStateForDate={getRangeStateForDate}
-          hasNoteForDate={hasNote}
-        />
+        <div key={monthAnimationKey} className="calendar-grid-enter transition-all duration-300 ease-in-out">
+          <CalendarGrid
+            days={days}
+            selectedDate={selectedDate}
+            onSelect={handleDateSelect}
+            onDayHover={handleDayHover}
+            getRangeStateForDate={getRangeStateForDate}
+            hasNoteForDate={hasNote}
+            theme={theme}
+          />
+        </div>
       </div>
 
       <footer className="mt-5 rounded-2xl bg-zinc-100 px-4 py-3 text-sm text-zinc-700">
@@ -480,6 +541,7 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         onClose={closePopover}
         onStartRange={handleStartRange}
         onAddNote={handleAddNoteFromPopover}
+        theme={theme}
       />
 
       <RangeCreateModal
@@ -490,6 +552,7 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         onNameChange={setRangeNameDraft}
         onSave={handleCreateRangeSave}
         onCancel={handleCreateRangeCancel}
+        theme={theme}
       />
 
       <RangeDetailsModal
@@ -498,6 +561,7 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         onModify={handleModifyRange}
         onAddNote={handleAddNoteFromRangeDetails}
         onDeleteRequest={handleDeleteRequest}
+        theme={theme}
         onClose={() => {
           setShowRangeDetailsModal(false);
           setShowDeleteConfirmModal(false);
@@ -515,6 +579,7 @@ export default function CalendarWidget({ notes = [], onAddNote, onSelectedDateCh
         onDescriptionChange={setNoteDescriptionDraft}
         onSave={handleSaveNote}
         onCancel={closeNoteModal}
+        theme={theme}
       />
 
       <RangeDeleteConfirmModal

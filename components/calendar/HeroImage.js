@@ -1,13 +1,15 @@
-const HERO_IMAGE_URL =
-  "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80";
+import { getSeason, THEMES } from "@/utils/seasonTheme";
 
-export default function HeroImage() {
+export default function HeroImage({ monthIndex = new Date().getMonth() }) {
+  const season = getSeason(monthIndex);
+  const theme = THEMES[season];
+
   return (
-    <div className="relative h-52.5 w-full overflow-hidden rounded-t-3xl sm:h-60">
+    <div className="relative h-52.5 w-full overflow-hidden rounded-t-3xl transition-colors duration-300 sm:h-60">
       <img
-        src={HERO_IMAGE_URL}
-        alt="Nature landscape"
-        className="h-full w-full object-cover"
+        src={theme.image}
+        alt={`${season} seasonal landscape`}
+        className="h-full w-full object-cover transition-opacity duration-300"
       />
 
       <div

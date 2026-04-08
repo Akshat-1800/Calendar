@@ -1,0 +1,24 @@
+const HERO_IMAGE_URL =
+  "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80";
+
+export default function HeroImage() {
+  return (
+    <div className="relative h-52.5 w-full overflow-hidden rounded-t-3xl sm:h-60">
+      <img
+        src={HERO_IMAGE_URL}
+        alt="Nature landscape"
+        className="h-full w-full object-cover"
+      />
+
+      <div
+        className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-black/25 to-transparent"
+        aria-hidden="true"
+      />
+
+      <div className="absolute bottom-4 left-4 right-4 text-white sm:bottom-5 sm:left-5 sm:right-5">
+        <p className="text-xs uppercase tracking-[0.2em] text-white/85">Daily planning</p>
+        <h3 className="mt-1 text-xl font-semibold leading-tight sm:text-2xl">Keep Your Month In Focus</h3>
+      </div>
+    </div>
+  );
+}

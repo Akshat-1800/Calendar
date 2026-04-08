@@ -84,7 +84,7 @@ export default function NotesPanel({ notes, selectedDate, onAddNote, onDeleteNot
   }
 
   return (
-    <aside className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+    <aside className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
           Notes
@@ -104,7 +104,7 @@ export default function NotesPanel({ notes, selectedDate, onAddNote, onDeleteNot
         </button>
       </div>
 
-      <div className="mt-4 max-h-112 space-y-3 overflow-y-auto pr-1 text-sm text-zinc-600">
+      <div className="mt-3 max-h-84 space-y-3 overflow-y-auto pr-1 text-sm text-zinc-600 sm:max-h-96 lg:max-h-112">
         {sortedNotes.length === 0 ? (
           <p className="rounded-lg bg-zinc-100 px-3 py-2">
             No notes yet.

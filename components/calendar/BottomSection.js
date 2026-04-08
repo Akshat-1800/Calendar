@@ -41,7 +41,7 @@ export default function BottomSection({ onVisibleMonthIndexChange }) {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 gap-3 p-3 sm:gap-5 sm:p-7 md:p-8 lg:grid-cols-[30%_70%]">
+    <div className="grid grid-cols-1 gap-2 p-2 sm:gap-4 sm:p-4 md:p-5 lg:grid-cols-[30%_70%]">
       <NotesPanel
         notes={notes}
         selectedDate={selectedDate}

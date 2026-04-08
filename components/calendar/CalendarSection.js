@@ -7,12 +7,12 @@ export default function CalendarSection({
   onVisibleMonthIndexChange,
 }) {
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-5">
+    <section className="rounded-2xl border border-gray-200 bg-white p-2.5 shadow-sm sm:p-4">
       <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
         Calendar Section
       </h3>
 
-      <div className="mt-4">
+      <div className="mt-3">
         <CalendarWidget
           notes={notes}
           onAddNote={onAddNote}

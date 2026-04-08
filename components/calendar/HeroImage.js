@@ -5,7 +5,7 @@ export default function HeroImage({ monthIndex = new Date().getMonth() }) {
   const theme = THEMES[season];
 
   return (
-    <div className="relative h-52.5 w-full overflow-hidden rounded-t-3xl transition-colors duration-300 sm:h-60">
+    <div className="relative h-40 w-full overflow-hidden rounded-t-3xl transition-colors duration-300 sm:h-48 md:h-52">
       <img
         src={theme.image}
         alt={`${season} seasonal landscape`}

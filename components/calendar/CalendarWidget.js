@@ -506,7 +506,7 @@ export default function CalendarWidget({
       {isAwaitingEndSelection && (
         <p
           className={cn(
-            "mt-4 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-300",
+            "mt-3 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-300",
             theme.borderSoft,
             theme.preview,
             theme.textStrong
@@ -516,7 +516,7 @@ export default function CalendarWidget({
         </p>
       )}
 
-      <div className="mt-5">
+      <div className="mt-4">
         <div key={monthAnimationKey} className="calendar-grid-enter transition-all duration-300 ease-in-out">
           <CalendarGrid
             days={days}
@@ -530,7 +530,7 @@ export default function CalendarWidget({
         </div>
       </div>
 
-      <footer className="mt-5 rounded-2xl bg-zinc-100 px-4 py-3 text-sm text-zinc-700">
+      <footer className="mt-4 rounded-2xl bg-zinc-100 px-3 py-2.5 text-sm text-zinc-700 sm:px-4 sm:py-3">
         <span className="font-medium text-zinc-900">Selected date:</span> {selectedDateText}
       </footer>
 

@@ -2,7 +2,14 @@ import { isSameDay } from "date-fns";
 import { WEEKDAY_LABELS } from "@/utils/date";
 import CalendarDayCell from "./CalendarDayCell";
 
-export default function CalendarGrid({ days, selectedDate, onSelect }) {
+export default function CalendarGrid({
+  days,
+  selectedDate,
+  onSelect,
+  onDayHover,
+  getRangeStateForDate,
+  hasNoteForDate,
+}) {
   return (
     <div>
       <div className="mb-2 grid grid-cols-7 gap-2">
@@ -18,8 +25,11 @@ export default function CalendarGrid({ days, selectedDate, onSelect }) {
           <CalendarDayCell
             key={day.date.toISOString()}
             day={day}
-            isSelected={isSameDay(day.date, selectedDate)}
+            isSelected={Boolean(selectedDate) && isSameDay(day.date, selectedDate)}
             onSelect={onSelect}
+            onHover={onDayHover}
+            rangeState={getRangeStateForDate?.(day.date)}
+            hasNote={hasNoteForDate?.(day.date)}
           />
         ))}
       </div>

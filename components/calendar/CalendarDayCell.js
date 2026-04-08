@@ -30,7 +30,7 @@ export default function CalendarDayCell({
       onFocus={() => onHover?.(day.date)}
       onBlur={() => onHover?.(null)}
       className={cn(
-        "relative flex h-11 w-11 items-center justify-center justify-self-center rounded-xl border text-sm md:h-12 md:w-12 md:text-base transition-[transform,box-shadow,background-color,color,border-color] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-1 active:scale-95",
+        "relative mx-auto flex aspect-square w-full max-w-8 items-center justify-center rounded-xl border text-[11px] transition-[transform,box-shadow,background-color,color,border-color] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-1 active:scale-95 sm:max-w-10 sm:text-sm md:max-w-11 md:text-base lg:max-w-12",
         day.inCurrentMonth
           ? "border-zinc-200 bg-white text-zinc-800"
           : "border-zinc-100 bg-zinc-50 text-zinc-400",
